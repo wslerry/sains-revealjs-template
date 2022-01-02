@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+        {% include meta.html %}
+		<title>{{page.title}}</title>
+
+		<link rel="stylesheet" href="../dist/reveal.css">
+		<link rel="stylesheet" href="../dist/theme/{{page.theme}}.css" id="theme">
+
+        <link rel="stylesheet" href="../plugin/highlight/{{page.highlight}}.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/fontawesome.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/solid.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/brands.min.css">
+
+	</head>
+
+	<body>
+		<div class="reveal">
+            <div class="slides">
+                <!-- first page -->
+                <section data-background-image="../dist/theme/img/front.jpg" 
+                data-background-size="100%" data-background-repeat="no-repeat">
+                    <div class="container">
+                        <div class="col"></div>
+                        <div class="col">
+                            <h1 class="rightside">{{page.title}}</h1>
+                            <br>
+                            <p class="rightside">{{page.description}}</p>
+                            <br>
+                            <br>
+                            <hr>
+                            <p class="rightside" id="date"></p>
+                        </div>
+                    </div>
+                </section>
+                <!-- read markdown -->
+                <section data-markdown 
+                            data-separator="^\n-next-\n$" 
+                            data-separator-vertical="^\n-down-\n$"
+                            data-separator-notes="^Note:"
+                            data-charset="iso-8859-15"
+                            >
+                    <script type="text/template">
+                        {{ content }}
+                    </script>
+                </section>
+            </div>
+        </div>
+        
+        <script src="../dist/reveal.js"></script>
+        <script src="../plugin/markdown/markdown.js"></script>
+        <script src="../plugin/highlight/highlight.js"></script>
+        <script src="../plugin/notes/notes.js"></script>
+        <script src="../plugin/math/math.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/fontawesome.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/solid.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/brands.min.js"></script>
+        <script>
+            n =  new Date();
+            y = n.getFullYear();
+            m = n.getMonth() + 1;
+            d = n.getDate();
+            document.getElementById("date").innerHTML = d + "/" + m + "/" + y;
+        </script>
+        <script>
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+                viewDistance: 3,
+                slideNumber: 'c/t',
+                transition: 'slide',
+                math: {
+                    mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+                    config: 'TeX-AMS_HTML-full',  // See http://docs.mathjax.org/en/latest/config-files.html
+                        extensions: ["AMSmath.js"]
+                    },
+                plugins: [ RevealMarkdown, 
+                            RevealHighlight, 
+                            RevealNotes, 
+                            RevealMath.KaTeX 
+                        ]
+            });
+        </script>
+    </body>
+</html>
