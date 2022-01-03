@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Simple Gantt</title>
+	<style>
+		body {
+			font-family: sans-serif;
+            color: #f5f5f5;
+			background: rgba(73, 73, 73, 0);
+		}
+		.container {
+			width: 80%;
+			margin: 0 auto;
+		}
+		/* custom class */
+		.gantt .bar-milestone .bar {
+			fill: tomato;
+		}
+	</style>
+	<link rel="stylesheet" href="./frappe-gantt/dist/frappe-gantt.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" type="text/css">
+	<script src="./frappe-gantt/dist/frappe-gantt.js"></script>
+</head>
+<body>
+	<div class="container">
+		<h2>Change Detection Planning</h2>
+		<div class="gantt-target"></div>
+	</div>
+	<script>
+		var tasks = [
+			{
+				start: '2021-12-01',
+				end: '2021-12-31',
+				name: 'Planning and assessment on data sources and methodology',
+				id: "Task 0",
+				progress: 100
+			},
+            {
+				start: '2021-12-10',
+				end: '2022-01-31',
+				name: 'Building a pipeline and planning for the proposed method in ArcgisPro',
+				id: "Task 1",
+				progress: 80,
+				dependencies: 'Task 0'
+			},
+			{
+				start: '2021-12-20',
+				end: '2022-01-31',
+				name: 'Data sources (satellites/drone/airborne) inquiry from image provider',
+				id: "Task 2",
+				progress: 70,
+				dependencies: 'Task 0'
+			},
+			{
+				start: '2021-12-20',
+				end: '2022-01-10',
+				name: 'Testing ML/DL classification on sample data (External)',
+				id: "Task 3",
+				progress: 100,
+				dependencies: ['Task 2', 'Task 1']
+			},
+			{
+				start: '2022-01-11',
+				end: '2022-03-30',
+				name: 'Classified image based on proposed method - DL/ML (in ArcGIS)',
+				id: "Task 4",
+				progress: 0,
+				dependencies: ['Task 2', 'Task 3']
+			},
+			{
+				start: '2022-01-11',
+				end: '2022-03-30',
+				name: 'Test Build-in function by satellite provider',
+				id: "Task 5",
+				progress: 0,
+				dependencies: ['Task 2']
+			},
+			{
+				start: '2022-03-30',
+				end: '2022-04-31',
+				name: 'Change Detection from processed/classified images using ArcGIS Pro funtions',
+				id: "Task 6",
+				progress: 0,
+				dependencies: 'Task 4'
+			},
+			{
+				start: '2022-04-31',
+				end: '2022-05-15',
+				name: 'Comparison on accuracy from build-in by image provider and Arcgis Pro funtions',
+				id: "Task 7",
+				progress: 0,
+				dependencies: ['Task 5', 'Task 6']
+			},
+			{
+				start: '2022-05-15',
+				end: '2022-06-01',
+				name: 'Test on client side',
+				id: "Task 8",
+				progress: 0,
+				dependencies: 'Task 7',
+				custom_class: 'bar-milestone'
+			}
+		]
+		var gantt_chart = new Gantt(".gantt-target", tasks, {
+			on_click: function (task, progress) {
+				console.log(task);
+			},
+			on_date_change: function(task, start, end) {
+				console.log(task, start, end);
+			},
+			on_progress_change: function(task, progress) {
+				console.log(task, progress);
+			},
+			on_view_change: function(mode) {
+				console.log(mode);
+			},
+			custom_popup_html: function(task) {
+				return `
+					<div class="gantt-container">
+					<span><i class="fas fa-spinner fa-pulse"></i><p>${task.progress}% completed!</p></span>
+					</div>
+				`;},
+			view_mode: 'Week',
+			language: 'en',
+		});
+		console.log(gantt_chart);
+
+		// var gantt4 = new Gantt(".gantt-target", tasks, {
+		// 	custom_popup_html: function(task) {
+		// 	const end_date = task._end.format('MMM D');
+		// 	return `
+		// 		<div class="details-container">
+		// 		<h5>${task.name}</h5>
+		// 		<p>Expected to finish by ${end_date}</p>
+		// 		<p>${task.progress}% completed!</p>
+		// 		</div>
+		// 	`;
+		// 	}
+		// })
+	</script>
+	
+</body>
+</html>

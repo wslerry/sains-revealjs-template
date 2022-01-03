@@ -1,0 +1,258 @@
+---
+layout: presentation
+title: Proof of Concept (POC) - Change Detection
+description: >-
+    Milestones, implementations plan, and challenges
+theme: sains
+highlight: monokai
+order: 100
+---
+
+# 1.0 introduction
+
+-down-
+
+## 1.1 Change Detection Analysis
+
+>Change Detection can be defined as the process of identifying differences in the state of an 
+object or phenomenon by observing it at different times.
+
+-down-
+
+source of data is geographic and is usually in :
+- digital format (e.g., satellite imagery)
+- analog format (e.g., aerial photos)
+- vector format (e.g., feature maps)
+- Ancillary data (e.g., historical, economic, etc.)
+
+-down-
+
+## 1.2 Scope
+
+-down-
+
+## 1.2.1  Source of Imagery (Scope 1)
+
+### Satellite Imagery:
+
+- [ ] To perform data capturing and to detail out the offered resolution and frequencies of available imagery data. (yearly, quarterly, monthly, weekly, or daily)
+- [ ] To perform raster analysis using build-in functions by data provider
+- [ ] To perform data conversion ( result from (b)) into measureable dataset
+- [ ] To export same data (under (b)) to ArcgisPro
+- [ ] To perform raster analysis using ArcgisPro build-in funtion
+- [ ] To perform data conversion ( result from (e)) into measureable dataset
+- [ ] Compare result b. and e.
+- [ ] To provide comparison on temporal spatial data analysis
+- [ ] Provide data in local projection (BRSO)
+
+-down-
+
+### Airborne and UAV:
+
+- [ ] To perform raster analysis using ArcgisPro build-in funtion
+- [ ] To perform data conversion ( result from (e)) into measureable dataset
+- [ ] To provide comparison on temporal spatial data
+analysis
+
+-down-
+
+## 1.2.2  Change Detection - Squatter Colony (Scope 2)
+
+- [ ] To perform raster analysis using build-in functions by data provider
+- [ ] To perform data conversion ( result from (a)) into measureable dataset
+- [ ] To export same data (under (a)) to ArcgisPro
+- [ ] To perform raster analysis using ArcgisPro build-in funtion
+- [ ] To perform data conversion ( result from (d)) into measureable dataset
+- [ ] Compare result b. and e.
+- [ ] To provide comparison on temporal spatial data analysis
+- [ ] Provide data in local projection (BRSO)
+
+-down-
+
+## 1.2.3  Building/ Structure Footprint (Scope 3)
+
+- [ ] To show capability of data provider build-in funtion in detect/create building/structure footprint
+- [ ] To perform data conversion ( result from (a)) into measureable dataset
+- [ ] To export same data (under (a)) to ArcgisPro
+- [ ] To perform raster analysis using ArcgisPro build-in funtion
+- [ ] To perform data conversion ( result from (d)) into measureable dataset
+- [ ] Compare result b. and e.
+- [ ] To provide comparison on temporal spatial data analysis
+- [ ] Provide data in local projection (BRSO)
+
+-next-
+
+# 2. Milestones
+
+-down-
+
+<!-- 
+    .slide: 
+        data-background-iframe="../assets/charts/index.html"
+        data-background-interactive
+-->
+
+-down-
+
+![high_res](./imgs/high_res.jpg)
+
+-down-
+
+![mid_res](./imgs/mid_res.jpg)
+
+-down-
+
+![landsurvey tools](./imgs/tools_change_detection.png)
+
+-down-
+
+<!-- 
+    .slide: 
+        data-background-iframe="../assets/maps/index.html"
+        data-background-interactive
+-->
+
+-next-
+
+# 3. Implementation workflow
+
+- [x] Planning and assessment on data sources and methodology
+- [x] Identify data sources (satellites/drone/airborne)
+- [x] Scripting and planning for the proposed method in ArcgisPro
+- [x] Training classification for sample data (External)
+- [x] Testing on sample (External)
+- [ ] Classified images based on proposed method
+- [ ] Train all models (ML/DL)
+- [ ] Change detection based on classified images
+- [ ] Port function into ArcgisPro as a toolboox
+- [ ] Testing on sample
+- [ ] Testing toolbox on client’s machine
+- [ ] Final output for POC
+
+-next-
+
+## 3.1 Processing 
+
+Prepare datasets in Arcgis  --> Trains image datasets outside of Arcgis --> Use generated models by creating a `*.dlpk` format to use in Arcgispro
+
+```python
+import os
+from pathlib import Path
+
+import arcgis
+from arcgis.gis import GIS
+from arcgis.learn import prepare_data
+```
+
+```python
+filepath = r'C:\deep_learning_fastai_unet\data_for_training'
+data_path = Path(filepath)
+```
+
+running python in Jupyter Notebook
+
+
+-down-
+
+
+
+## training Deep learning model in Arcgis! 
+
+
+```python
+# Prepare Data
+data = prepare_data(path=data_path,chip_size=512,batch_size=8)
+```
+
+
+-down-
+
+
+```python
+data.show_batch(rows=5, alpha=0.7)
+```
+
+
+![png](./imgs/output_5_0.jpg)
+
+
+-down-
+
+```python
+model = arcgis.learn.models.UnetClassifier(data)
+```
+
+    Downloading: "https://download.pytorch.org/models/resnet34-333f7ec4.pth" to C:\Users\lerryws/.cache\torch\checkpoints\resnet34-333f7ec4.pth
+    100%|##########| 83.3M/83.3M [00:05<00:00, 15.6MB/s]
+
+```python
+# Find Learning Rate
+model.lr_find()
+```
+
+-down-
+
+```python
+# Training
+model.fit(30, lr=slice(0.0001, 0.001))
+```
+
+
+```python
+# Preview Results
+model.show_results()
+```
+
+
+```python
+# Save model to file
+model.save('lusut2006_30epoch_8batch')
+```
+
+-down-
+
+```python
+# load model to retrained!
+oldmodel = model.load('lusut2006_30epoch_8batch')
+
+with arcpy.EnvManager(parallelProcessingFactor="8", processorType="GPU"):
+    arcpy.ia.TrainDeepLearningModel(r"C:\deep_learning_fastai_unet\data_for_training", 
+                                    r"C:\deep_learning_fastai_unet\models", 
+                                    50, 
+                                    "UNET", 
+                                    32, 
+                                    "class_balancing False;mixup False;focal_loss False;ignore_classes #;chip_size 512", 
+                                    0.0001, 
+                                    "RESNET34", 
+                                    oldmodel, 
+                                    10, 
+                                    "STOP_TRAINING", 
+                                    "FREEZE_MODEL")
+```
+
+-down-
+
+## Next steps >>>>
+
+- [ ] Use `Classify Pixels Using Deep Learning` in arcgispro
+- [ ] Classified Satellite/Airborne/Drone images using `Classify Pixels Using Deep Learning` tool in arcgis pro
+- [ ] Vectorize rasters to a vector Polygon layer using `Raster to Polygon`
+- [ ] **Change Detection** will be done by using tools as below.
+- [ ] Optimization, Model improvement Standalone framework for future development
+- [x] Standalone framework
+
+-down-
+
+### Possible tools for _`Change Detection`_
+- `Detect Change Using Deep Learning` - using two inputs from different timeframe
+- `Analyze Change Using CCDC` - multidimensional dataset will be created from classified data... \[2006, 2009, 2014, 2018\] and analyze changes based onf classified image
+- `Compute Change Raste` - pixel differences 
+- `Analyze Changes Using LandTrendr` - Using multidimensional dataset to detect changes
+- `Detect Change Using Change Analysis Raster` - This tool uses a change analysis raster generated from the `Analyze Changes Using CCDC` tool or the `Analyze Changes Using LandTrendr` tool to generate a raster containing point of change information.
+
+-next-
+
+# 4. Challenges and discussions
+
+- Image quality issues especially satellite images due to cloud cover issues
+- Computation capabilities
