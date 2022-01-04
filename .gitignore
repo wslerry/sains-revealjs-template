@@ -4,4 +4,4 @@ Gemfile.lock
 .jekyll-cache
 assets/maps/*
 assets/vids/*
-_slides/imgs
+_slides

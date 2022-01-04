@@ -20,10 +20,10 @@ object or phenomenon by observing it at different times.
 -down-
 
 source of data is geographic and is usually in :
-- digital format (e.g., satellite imagery)
-- analog format (e.g., aerial photos)
-- vector format (e.g., feature maps)
-- Ancillary data (e.g., historical, economic, etc.)
+- digital format (e.g., satellite imagery, drone imagery)
+- analog format (e.g., aerial photos, drone photos)
+- vector format (e.g., cadastral maps, building footprint)
+- Ancillary data (e.g., cadastral information, etc.)
 
 -down-
 
@@ -37,11 +37,11 @@ source of data is geographic and is usually in :
 
 - [ ] To perform data capturing and to detail out the offered resolution and frequencies of available imagery data. (yearly, quarterly, monthly, weekly, or daily)
 - [ ] To perform raster analysis using build-in functions by data provider
-- [ ] To perform data conversion ( result from (b)) into measureable dataset
-- [ ] To export same data (under (b)) to ArcgisPro
+- [ ] To perform data conversion ( result from (<span style="color:red">**`b.`**</span>)) into measureable dataset
+- [ ] To export same data (under (<span style="color:red">**`b.`**</span>)) to ArcgisPro
 - [ ] To perform raster analysis using ArcgisPro build-in funtion
-- [ ] To perform data conversion ( result from (e)) into measureable dataset
-- [ ] Compare result b. and e.
+- [ ] To perform data conversion ( result from (<span style="color:red">**`e.`**</span>)) into measureable dataset
+- [ ] Compare result <span style="color:red">**`b.`**</span> and <span style="color:red">**`e.`**</span> 
 - [ ] To provide comparison on temporal spatial data analysis
 - [ ] Provide data in local projection (BRSO)
 
@@ -50,7 +50,7 @@ source of data is geographic and is usually in :
 ### Airborne and UAV:
 
 - [ ] To perform raster analysis using ArcgisPro build-in funtion
-- [ ] To perform data conversion ( result from (e)) into measureable dataset
+- [ ] To perform data conversion ( result from (<span style="color:red">**`e`**</span>)) into measureable dataset
 - [ ] To provide comparison on temporal spatial data
 analysis
 
@@ -59,11 +59,11 @@ analysis
 ## 1.2.2  Change Detection - Squatter Colony (Scope 2)
 
 - [ ] To perform raster analysis using build-in functions by data provider
-- [ ] To perform data conversion ( result from (a)) into measureable dataset
-- [ ] To export same data (under (a)) to ArcgisPro
+- [ ] To perform data conversion ( result from (<span style="color:red">**`a.`**</span>)) into measureable dataset
+- [ ] To export same data (under (<span style="color:red">**`a.`**</span>))) to ArcgisPro
 - [ ] To perform raster analysis using ArcgisPro build-in funtion
-- [ ] To perform data conversion ( result from (d)) into measureable dataset
-- [ ] Compare result b. and e.
+- [ ] To perform data conversion ( result from (<span style="color:red">**`d.`**</span>))) into measureable dataset
+- [ ] Compare result <span style="color:red">**`a.`**</span> and <span style="color:red">**`d.`**</span>
 - [ ] To provide comparison on temporal spatial data analysis
 - [ ] Provide data in local projection (BRSO)
 
@@ -72,11 +72,11 @@ analysis
 ## 1.2.3  Building/ Structure Footprint (Scope 3)
 
 - [ ] To show capability of data provider build-in funtion in detect/create building/structure footprint
-- [ ] To perform data conversion ( result from (a)) into measureable dataset
-- [ ] To export same data (under (a)) to ArcgisPro
+- [ ] To perform data conversion ( result from (<span style="color:red">**`a.`**</span>)) into measureable dataset
+- [ ] To export same data (under (<span style="color:red">**`a.`**</span>))) to ArcgisPro
 - [ ] To perform raster analysis using ArcgisPro build-in funtion
-- [ ] To perform data conversion ( result from (d)) into measureable dataset
-- [ ] Compare result b. and e.
+- [ ] To perform data conversion ( result from (<span style="color:red">**`d.`**</span>))) into measureable dataset
+- [ ] Compare result <span style="color:red">**`a.`**</span> and <span style="color:red">**`d.`**</span>
 - [ ] To provide comparison on temporal spatial data analysis
 - [ ] Provide data in local projection (BRSO)
 
@@ -94,15 +94,23 @@ analysis
 
 -down-
 
-![high_res](./imgs/high_res.jpg)
+<!-- 
+    .slide: 
+        data-background-iframe="../assets/charts/scope1.html"
+        data-background-interactive
+-->
+
+-down-
+
+![high_res](./imgs/high_res.png)
+
+-down-
+
+![](./imgs/sat_build_in.png)
 
 -down-
 
 ![mid_res](./imgs/mid_res.jpg)
-
--down-
-
-![landsurvey tools](./imgs/tools_change_detection.png)
 
 -down-
 
@@ -112,26 +120,17 @@ analysis
         data-background-interactive
 -->
 
+-down-
+
+![mid_res](./imgs/tools_change_detection.png)
+
 -next-
 
 # 3. Implementation workflow
 
-- [x] Planning and assessment on data sources and methodology
-- [x] Identify data sources (satellites/drone/airborne)
-- [x] Scripting and planning for the proposed method in ArcgisPro
-- [x] Training classification for sample data (External)
-- [x] Testing on sample (External)
-- [ ] Classified images based on proposed method
-- [ ] Train all models (ML/DL)
-- [ ] Change detection based on classified images
-- [ ] Port function into ArcgisPro as a toolboox
-- [ ] Testing on sample
-- [ ] Testing toolbox on client’s machine
-- [ ] Final output for POC
-
 -next-
 
-## 3.1 Processing 
+## 3.1 Processing In Arcgis (Deep Learning Workflow)
 
 Prepare datasets in Arcgis  --> Trains image datasets outside of Arcgis --> Use generated models by creating a `*.dlpk` format to use in Arcgispro
 
@@ -232,6 +231,239 @@ with arcpy.EnvManager(parallelProcessingFactor="8", processorType="GPU"):
 
 -down-
 
+
+## 3.1 Processing Google Colab (Deep Learning Workflow)
+
+```python
+#@title **Mounting GDrive**
+#@markdown _Note_: Skip to next step if you just want to run a prediction of the dataset
+
+
+from google.colab import drive
+drive.mount('/content/gdrive', force_remount=True)
+
+!ln -s /content/gdrive/My\ Drive/dl_models_output/ /content/dl_models_output
+```
+
+    Mounted at /content/gdrive
+
+
+-down-
+
+```python
+#@title **Download model**
+#@markdown Model is in *.hdf5 format. This model has been trained from previous training. Do not run this step if you already mounted your GDrive(for Author)
+import os
+if not os.path.exists('/content/dl_models_output'):
+    !mkdir /content/dl_models_output
+else:
+    pass
+!gdown https://drive.google.com/u/2/uc?id=1WgpoeOJq0baixfslJdrKDtCEq7B61XWB&export=downloads
+!cp /content/unet_weights.hdf5 /content/dl_models_output
+!rm -f unet_weights.hdf5
+```
+
+-down-
+
+```python
+#@title **Setup**
+#@markdown - Install required libraries
+#@markdown - Clone repo from `wslerry/deep-unet-for-satellite-image-segmentation`
+!apt-get install tree
+!pip install rasterio
+%matplotlib inline
+
+%cd /content/
+if os.path.exists("/content/deep-unet-for-satellite-image-segmentation"):
+    !rm -r /content/deep-unet-for-satellite-image-segmentation
+
+if not os.path.exists("/content/deep-unet-for-satellite-image-segmentation"):
+    !git clone https://github.com/wslerry/deep-unet-for-satellite-image-segmentation.git
+    %cd /content/deep-unet-for-satellite-image-segmentation
+    !git checkout dev2021
+
+# Function to display image; Support TIF, JPEG, PNG, BMP
+def imShow(path):
+    import cv2
+    import matplotlib.pyplot as plt
+    %matplotlib inline
+
+    image = cv2.imread(path)
+    height, width = image.shape[:2]
+    resized_image = cv2.resize(image,(3*width, 3*height), interpolation = cv2.INTER_CUBIC)
+
+    fig = plt.gcf()
+    fig.set_size_inches(8, 8)
+    plt.axis("off")
+    plt.rcParams['figure.figsize'] = [10, 5]
+    plt.imshow(cv2.cvtColor(resized_image, cv2.COLOR_BGR2RGB))
+    plt.show()
+```
+
+-down-
+
+Start training.. 
+```python
+#@title **Train dataset**
+
+epochs = 200 #@param {type:"integer"}
+batch_size = 128 #@param {type:"integer"}
+trainsize = 5000 #@param {type:"integer"}
+validsize = 2500 #@param {type:"integer"}
+#@markdown Options:
+#@markdown - Make sure you are using Colab Pro..otherwise you cannot run this function. Error as such `tcmalloc: large alloc 8192000000 bytes == 0x55a3093e4000 @  0x7fa2b75ff1e7 0x7fa2747dc46e 0x7fa27482cc7b 0x7fa27482fe83 0x7fa27483007b 0x7fa2748d1761 0x55a29695a4b0 0x55a29695a240 0x55a2969ce0f3 0x55a2969c89ee 0x55a29695bbda 0x55a2969ca737 0x55a29695bafa 0x55a2969c9915 0x55a2969c89ee 0x55a2969c86f3 0x55a296a924c2 0x55a296a9283d 0x55a296a926e6 0x55a296a6a163 0x55a296a69e0c 0x7fa2b63e9bf7 0x55a296a69cea ^C`
+#@markdown - or, please skip to the next step...
+
+import tensorflow as tf
+sess = tf.compat.v1.Session(config=tf.compat.v1.ConfigProto(log_device_placement=True))
+
+try:
+    !python -u train_unet.py -e '{epochs}' -b '{batch_size}' --trainsize '{trainsize}' --validsize '{validsize}'
+    # !cp "./weights/unet_weights.hdf5" "/content/dl_models_output"
+except:
+    print("... You've failed me!")
+```
+
+-down-
+
+Testing on some image
+```python
+#@title **Run prediction**
+#@markdown Sample test data.
+test_img = "./data/mband/24.tif" #@param {type:"string"}
+#@markdown *Note*: directory to unet weight.
+#@markdown This weight has been trained using:
+#@markdown > batch = **128**, epoch = **50**, training size = **500**, validation size = **250**
+#@markdown >> *Obviously need more improvement*
+weight_url = "/content/dl_models_output/unet_weights.hdf5" #@param {type:"string"}
+import os
+import math
+import numpy as np
+import matplotlib.pyplot as plt
+import tifffile as tiff
+import argparse
+
+from train_unet import get_model, normalize, PATCH_SZ, N_CLASSES
+
+
+def predict(x, model, patch_sz=160, n_classes=5):
+    img_height = x.shape[0]
+    img_width = x.shape[1]
+    n_channels = x.shape[2]
+    # make extended img so that it contains integer number of patches
+    npatches_vertical = math.ceil(img_height / patch_sz)
+    npatches_horizontal = math.ceil(img_width / patch_sz)
+    extended_height = patch_sz * npatches_vertical
+    extended_width = patch_sz * npatches_horizontal
+    ext_x = np.zeros(shape=(extended_height, extended_width, n_channels), dtype=np.float32)
+    # fill extended image with mirrors:
+    ext_x[:img_height, :img_width, :] = x
+    for i in range(img_height, extended_height):
+        ext_x[i, :, :] = ext_x[2 * img_height - i - 1, :, :]
+    for j in range(img_width, extended_width):
+        ext_x[:, j, :] = ext_x[:, 2 * img_width - j - 1, :]
+
+    # now we assemble all patches in one array
+    patches_list = []
+    for i in range(0, npatches_vertical):
+        for j in range(0, npatches_horizontal):
+            x0, x1 = i * patch_sz, (i + 1) * patch_sz
+            y0, y1 = j * patch_sz, (j + 1) * patch_sz
+            patches_list.append(ext_x[x0:x1, y0:y1, :])
+    # model.predict() needs numpy array rather than a list
+    patches_array = np.asarray(patches_list)
+    # predictions:
+    patches_predict = model.predict(patches_array, batch_size=4)
+    prediction = np.zeros(shape=(extended_height, extended_width, n_classes), dtype=np.float32)
+    for k in range(patches_predict.shape[0]):
+        i = k // npatches_horizontal
+        j = k % npatches_vertical
+        x0, x1 = i * patch_sz, (i + 1) * patch_sz
+        y0, y1 = j * patch_sz, (j + 1) * patch_sz
+        prediction[x0:x1, y0:y1, :] = patches_predict[k, :, :, :]
+    return prediction[:img_height, :img_width, :]
+
+
+def picture_from_mask(mask, threshold=0):
+    colors = {
+        0: [150, 150, 150],  # Buildings
+        1: [223, 194, 125],  # Roads & Tracks
+        2: [27, 120, 55],    # Trees
+        3: [166, 219, 160],  # Crops
+        4: [116, 173, 209]   # Water
+    }
+    z_order = {
+        1: 3,
+        2: 4,
+        3: 0,
+        4: 1,
+        5: 2
+    }
+
+    pict = 255*np.ones(shape=(3, mask.shape[1], mask.shape[2]), dtype=np.uint8)
+    for i in range(1, 6):
+        cl = z_order[i]
+        for ch in range(3):
+            pict[ch,:,:][mask[cl,:,:] > threshold] = colors[cl][ch]
+    return pict
+
+
+model = get_model()
+model.load_weights(weight_url)
+# test_id = 'test'
+img = normalize(tiff.imread(f'{test_img}').transpose([1,2,0]))   # make channels last
+# img = normalize(tiff.imread('{}'.format(opt.input)).transpose([1,2,0]))
+    
+for i in range(7):
+    if i == 0:  # reverse first dimension
+        mymat = predict(img[::-1,:,:], model, 
+                        patch_sz=PATCH_SZ, 
+                        n_classes=N_CLASSES).transpose([2,0,1])
+    elif i == 1:    # reverse second dimension
+        temp = predict(img[:,::-1,:], model, 
+                       patch_sz=PATCH_SZ, 
+                       n_classes=N_CLASSES).transpose([2,0,1])
+        mymat = np.mean( np.array([ temp[:,::-1,:], mymat ]), axis=0 )
+    elif i == 2:    # transpose(interchange) first and second dimensions
+        temp = predict(img.transpose([1,0,2]), model, 
+                       patch_sz=PATCH_SZ, 
+                       n_classes=N_CLASSES).transpose([2,0,1])
+        mymat = np.mean( np.array([ temp.transpose(0,2,1), mymat ]), axis=0 )
+    elif i == 3:
+        temp = predict(np.rot90(img, 1), model, 
+                       patch_sz=PATCH_SZ, 
+                       n_classes=N_CLASSES)
+        mymat = np.mean( np.array([ np.rot90(temp, -1).transpose([2,0,1]), mymat ]), axis=0 )
+    elif i == 4:
+        temp = predict(np.rot90(img,2), model, 
+                       patch_sz=PATCH_SZ, 
+                       n_classes=N_CLASSES)
+        mymat = np.mean( np.array([ np.rot90(temp,-2).transpose([2,0,1]), mymat ]), axis=0 )
+    elif i == 5:
+        temp = predict(np.rot90(img,3), model, 
+                       patch_sz=PATCH_SZ, 
+                       n_classes=N_CLASSES)
+        mymat = np.mean( np.array([ np.rot90(temp, -3).transpose(2,0,1), mymat ]), axis=0 )
+    else:
+        temp = predict(img, model, 
+                       patch_sz=PATCH_SZ, 
+                       n_classes=N_CLASSES).transpose([2,0,1])
+        mymat = np.mean( np.array([ temp, mymat ]), axis=0 )
+
+#print(mymat[0][0][0], mymat[3][12][13])
+print(f'Image shape: (band,w,h) - {mymat.shape}')
+map = picture_from_mask(mymat, 0.5)
+tiff.imsave('result.tif', (255*mymat).astype('uint8'))
+tiff.imsave('map.tif', map)
+imShow("map.tif")
+```
+
+-down-
+
+![png](./imgs/output_5_1.png)
+
+-down-
+
 ## Next steps >>>>
 
 - [ ] Use `Classify Pixels Using Deep Learning` in arcgispro
@@ -249,10 +481,3 @@ with arcpy.EnvManager(parallelProcessingFactor="8", processorType="GPU"):
 - `Compute Change Raste` - pixel differences 
 - `Analyze Changes Using LandTrendr` - Using multidimensional dataset to detect changes
 - `Detect Change Using Change Analysis Raster` - This tool uses a change analysis raster generated from the `Analyze Changes Using CCDC` tool or the `Analyze Changes Using LandTrendr` tool to generate a raster containing point of change information.
-
--next-
-
-# 4. Challenges and discussions
-
-- Image quality issues especially satellite images due to cloud cover issues
-- Computation capabilities
