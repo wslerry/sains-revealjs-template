@@ -2,6 +2,6 @@
 _site/
 Gemfile.lock
 .jekyll-cache
-assets/maps/*
-assets/vids/*
+# assets/maps/*
+# assets/vids/*
 _slides

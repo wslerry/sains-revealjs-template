@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset=utf-8 />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui' />
+    <title>Leaflet Side-by-side</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+     integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+     crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+     integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+     crossorigin=""></script>
+
+    <script src="./js/leaflet-side-by-side.js"></script>
+
+    <style>
+    body {
+        margin: 0;
+        padding: 0;
+    }
+    #map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+    }
+    </style>
+</head>
+
+<body>
+    <div id='map'></div>
+
+    <script>
+    // 4.3130717,114.0018852,18z
+    var map = L.map('map').setView([4.3130717, 114.0018852], 20);
+
+    var lusut18 = L.tileLayer('./assets/2018_tiles/{z}/{x}/{y}.png', {
+        minZoom: 17,
+        maxZoom: 20,
+        tms: false,
+        attribution: 'Lerry W. S'
+      }).addTo(map);
+
+    var lusut14 = L.tileLayer('./assets/2014_tiles/{z}/{x}/{y}.png', {
+        minZoom: 17,
+        maxZoom: 20,
+        tms: false,
+        attribution: 'Lerry W. S'
+    });
+
+
+    var lusut09 = L.tileLayer('./assets/2009_tiles/{z}/{x}/{y}.png', {
+        minZoom: 17,
+        maxZoom: 20,
+        tms: false,
+        attribution: 'Lerry W. S'
+    });
+
+    var lusut06 = L.tileLayer('./assets/2006_tiles/{z}/{x}/{y}.png', {
+        minZoom: 17,
+        maxZoom: 20,
+        tms: false,
+        attribution: 'Lerry W. S'
+      }).addTo(map);
+
+    // var mapLayer1 = L.layerGroup(lusut06);
+    // var mapLayer2 = L.layerGroup([lusut14, lusut18]).addTo(map);
+
+    var baseLayers = {
+        "2006": lusut06
+    };
+
+    var overlays = {
+        "2009": lusut09,
+        "2014": lusut14,
+        "2018": lusut18,
+    };
+
+    L.control.sideBySide([lusut06, , ], [lusut09, lusut14, lusut18]).addTo(map);
+
+    L.control.layers(baseLayers, overlays,{collapsed:true, position: 'topright'}).addTo(map);
+
+    </script>
+</body>
+</html>
