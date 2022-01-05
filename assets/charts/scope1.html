@@ -65,7 +65,7 @@
 			{
 				start: '2022-03-30',
 				end: '2022-04-31',
-				name: 'Scope 1/2/3: To perform data conversion (result from rter analysis) into measureable dataset',
+				name: 'Scope 1/2/3: To perform data conversion (result from raster analysis) into measureable dataset',
 				id: "Task 3",
 				progress: 0,
 				dependencies: ['Task 1', 'Task 2']
@@ -76,7 +76,8 @@
 				name: 'Scope 1/2/3: Compare result from vendor\'s build-in vs Arcgispro build-in',
 				id: "Task 4",
 				progress: 0,
-				dependencies: 'Task 3'
+				dependencies: 'Task 3',
+				custom_class: 'bar-milestone'
 			},
             {
 				start: '2022-04-31',
@@ -84,17 +85,18 @@
 				name: 'Scope 1/2/3: To provide comparison on temporal spatial data analysis',
 				id: "Task 5",
 				progress: 0,
-				dependencies: 'Task 3'
-			},
-			{
-				start: '2022-05-15',
-				end: '2022-06-01',
-				name: 'Test on client side',
-				id: "Task 8",
-				progress: 0,
-				dependencies: ['Task 1', 'Task 2', 'Task 3', 'Task 4', 'Task 5'],
+				dependencies: 'Task 3',
 				custom_class: 'bar-milestone'
-			}
+			},
+			// {
+			// 	start: '2022-05-15',
+			// 	end: '2022-06-01',
+			// 	name: 'Test on client side',
+			// 	id: "Task 8",
+			// 	progress: 0,
+			// 	dependencies: ['Task 1', 'Task 2', 'Task 3', 'Task 4', 'Task 5'],
+			// 	custom_class: 'bar-milestone'
+			// }
 		]
 
 		// var gantt_chart = new Gantt(".gantt-target", tasks);
