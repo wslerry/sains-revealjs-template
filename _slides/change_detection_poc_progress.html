@@ -1,0 +1,344 @@
+---
+layout: presentation
+title: Change Detection POC
+description: >-
+    Progress and implementation
+theme: sains
+highlight: monokai
+order: 100
+---
+
+# 1.0 introduction
+
+-down-
+
+## 1.1 Change Detection Analysis
+
+>Change Detection can be defined as the process of identifying differences in the state of an 
+object or phenomenon by observing it at different times.
+
+-down-
+
+source of data is geographic and is usually in :
+- digital format (*e.g., satellite imagery, aerial photos, drone imagery*)
+- analog format (*e.g., aerial photos, drone photos*)
+- vector format (*e.g., cadastral maps, building footprint*)
+- Ancillary data (*e.g., cadastral information, etc.*)
+
+-next-
+
+# 2.0 Progress over scopes
+
+-down-
+
+## Scope 1 :  **Source of Imagery**
+
+### Satellite Imagery:
+
+- To perform data capturing and to detail out the offered resolution and frequencies of available imagery data. (yearly, quarterly, monthly, weekly, or daily)
+- To perform raster analysis using build-in functions by data provider
+- To perform data conversion ( result from (<span style="color:red">**`b.`**</span>)) into measureable dataset
+- To export same data (under (<span style="color:red">**`b.`**</span>)) to ArcgisPro
+- To perform raster analysis using ArcgisPro build-in function
+- To perform data conversion ( result from (<span style="color:red">**`e.`**</span>)) into measureable dataset
+- Compare result <span style="color:red">**`b.`**</span> and <span style="color:red">**`e.`**</span> 
+- To provide comparison on temporal spatial data analysis
+- Provide data in local projection (BRSO)
+
+-down-
+
+### Airborne and UAV:
+
+- To perform raster analysis using ArcgisPro build-in funtion
+- To perform data conversion ( result from (<span style="color:red">**`e`**</span>)) into measureable dataset
+- To provide comparison on temporal spatial data analysis
+
+-down-
+
+Scope 1.a
+
+**Data availability and acquisition from vendors**
+
+|Vendors|Satellite|Spatial Resolution (m)|Tasking/Ad-hoc|Archive|
+|-----|----|----|-----|-----|
+|MAXAR|Worldview-4|0.31|✅|✅|
+|MAXAR|Worldview-3|0.31|✅|✅|
+|Planetlab|SkySat|0.5|✅|✅|
+|Planetlab|Dove|3|✅|✅|
+
+-down-
+
+Scope 1.a
+
+**Temporal data availability**
+
+|Image provider|daily|weekly|monthly|quarterly|yearly|
+|---|---|---|---|---|---|
+|MAXAR - WorldView 3/4 (0.31m)|✅|?|?|?|?|
+|Planetlab - SkySat (0.5m)|❎|?|?|?|?|
+|Planetlab - Dove (3m)|✅|✅|✅|✅|✅|
+
+-down-
+
+Scope 1.a Sample from Planetlab's Portal
+
+**Monthly Data Mosaic**
+
+![planetlabs monthly](./imgs/planetlabs/vVN4R9V1eA.jpg)
+
+-down-
+
+Scope 1.a Sample from Planetlab's Portal
+
+**Quarterly Data Mosaic**
+
+![planetlabs quarterly](./imgs/planetlabs/firefox_2zqAnvEiwN.jpg)
+
+-down-
+
+Scope 1.b
+
+Vendor's Portal for image analytic/ monitoring/ visualization/ basemaps/ Tasking query
+
+|Image provider|Vendor's 'build-in' function / image analytical services|
+|---|---|
+|MAXAR|SecureWatch & GeoHive|
+|Planetlab|Planet Portals|
+
+references:
+
+https://geohive.maxar.com/geohive/
+
+https://resources.maxar.com/securewatch-tutorials
+
+https://www.planet.com/products/analytics/
+
+
+-down-
+
+MAXAR SecureWatch Interface
+
+![maxar Securewatch](./imgs/maxar/firefox_Vif5ldTsMq.jpg)
+
+-down-
+
+What is in MAXAR SecureWatch?
+
+- **Imagery Saving & Ordering** Use the library to download imagery or place an order from the archive.
+
+- **Imagery Searching & Viewing** Search for an image, and then view it from the Carousel or using third-party tools.
+
+- **Tools** help you work with images in the system. For example, you can use the Dashboard to perform analysis functions, or you can add annotations to an image to identify a location or point of interest.
+
+-down-
+
+MAXAR GeoHive Interface
+
+![geohive](./imgs/maxar/firefox_GiyghryKH7.png)
+
+-down-
+
+What GeoHive do?
+
+>GeoHIVE enables organizations, small and large, to do more with geospatial data. Our cutting edge Machine Learning models and highly accurate crowdsourced data are all powered by Maxar’s high resolution satellite imagery.
+
+-down-
+
+What GeoHive do?
+
+- Machine learning and deep learning analysis
+- Validation and labeling of data
+- Models are trained
+- Training data is sent to the model
+- Highest confidence data is sent to customer
+
+-down-
+
+Planetlab Portal for tasking
+
+![planet portals](./imgs/planetlabs/firefox_i5TghsoPZq.png)
+
+
+-down-
+
+|Image provider|vendor's build-in function|Remarks|Object Detection|Object Classification|Change Detection|
+|---|---|---|---|---|---|
+|MAXAR|✅|In-house development - 2 months / GeoHive|✅|✅|✅|
+|Planetlab|✅|Through Planet Analytic Feeds API**|✅|✅|✅|
+
+**_subscription_
+
+** Planetlab using Dove 3.0m for this analytical service
+
+-down-
+
+Example of Building Detection from PlanetLabs
+
+![planetlabs sample 1](./imgs/planetlabs/msedge_lJdue87hu1.png)
+
+
+-down-
+
+Example of change detection from MAXAR product
+
+![maxar sample 1](./imgs/maxar/PCM.png)
+
+-down-
+
+**Persistent Change Monitoring (PCM)**
+
+>Persistent Change Monitoring (PCM) is a vector dataset produced by Maxar. This dataset depicts annual changes that were detected based on 30-meter Landsat and 10-meter Sentinel-2 imagery. Maxar hosts this dataset within SecureWatch and makes it available via the platform.
+
+-down-
+
+![](./imgs/maxar/PCM_Page_Refresh_Data_GIF.gif)
+
+-down-
+
+Scope 1.c Does vendors data able to give us a measureable dataset?
+
+|Vendors|Resolution(m)|Areas|Perimeter|Building count|Building Change Detected Count Building|
+|---|---|---|---|---|---|
+|Maxar|0.3|?|?|?|?|
+|Planet|3|✅|?|❎|?|
+
+-down-
+
+![planetlabs sample 1](./imgs/planetlabs/msedge_lJdue87hu1.png)
+
+-down-
+
+Scope 1 Airborne and UAV
+
+Current Dataset:
+- AOI : Lusut , Miri Sarawak.
+- Temporal: 2006, 2009, 2014, 2018
+- Spatial Resolution: 
+    - 2006: 0.5 m
+    - 2009, 2014, 2018: 0.2 m
+
+-down-
+
+<!-- 
+    .slide: 
+        data-background-iframe="../assets/maps/index.html"
+        data-background-interactive
+-->
+
+-down-
+
+## Scope 2: **Change Detection - Squatter Colony**
+
+### Satellite Imagery:
+
+- To perform raster analysis using build-in functions by data provider
+- To perform data conversion ( result from (<span style="color:red">**`a.`**</span>)) into measureable dataset
+- To export same data (under (<span style="color:red">**`a.`**</span>))) to ArcgisPro
+- To perform raster analysis using ArcgisPro build-in funtion
+- To perform data conversion ( result from (<span style="color:red">**`d.`**</span>))) into measureable dataset
+- Compare result <span style="color:red">**`a.`**</span> and <span style="color:red">**`d.`**</span>
+- To provide comparison on temporal spatial data analysis
+- Provide data in local projection (BRSO)
+
+-down-
+
+### Mixed Imagery(Satellite/Airborne/Drone):
+- To perform raster analysis using ArcgisPro build-in funtion
+- To perform data conversion ( result from (<span style="color:red">**`e`**</span>)) into measureable dataset
+- To provide comparison on temporal spatial data analysis
+
+-down-
+
+Scope 2.c Does vendors data able to give us a measureable dataset?
+
+|Vendors|resolution (m)|Building change detected count|% accuracy|?|
+|---|---|---|---|---|
+|Maxar|0.31|?|92|?|
+|Planet|3|?|76|?|
+
+-down-
+
+![planetlabs sample 2](./imgs/planetlabs/firefox_2P285gXw6V.gif)
+
+-next-
+
+# 3.0 Implementation of Machine Learning and Deep Learning in ArcGIS Pro
+
+- to answer Scope 1.e,f,g and Scope 2.c,d,e
+
+-down-
+
+![ai_ml_dl](./imgs/ai_ml_dl.jpg)
+
+-down-
+
+## 3.1 Machine Learning (ML)
+
+> An application of artificial intelligence that includes algorithms that parse data, learn from that data, and then apply what have been learned to make informed decisions. 
+
+- A purpose to use ML is to create a classified image using supervised or unsupervised classification
+- Classified images from satellite/drone/airborn dataset will be used to extract change detection information.
+
+-down-
+
+### Possible tools to classified image to use in  _`Change Detection`_
+
+|Classification method|Remarks|
+|---|---|
+|`ISO Cluster`|The ISO Cluster classifier performs an unsupervised classification. This classifier can process very large segmented images, whose attribute table can be large. Also, the tool can accept a segmented RGB raster from a third-party application. The tool works on standard Esri-supported raster files, as well as segmented raster datasets.|
+|`Maximum Likelihood`|The maximum likelihood classifier is a traditional technique for image classification. It is based on two principles: the pixels in each class sample in the multidimensional space are normally distributed, and Bayes' theorem of decision-making.|
+
+-down-
+
+|Classification method|Remarks|
+|---|---|
+|`Random Trees`|The random trees classifier is a powerful technique for image classification that is resistant to overfitting, and can work with segmented images and other ancillary raster datasets. For standard image inputs, the tool accepts multiband imagery with any bit depth, and it will perform the random trees classification on a pixel basis, based on the input training feature file.|
+|`Support Vector Machine (SVM)`|The SVM classifier provides a powerful, supervised classification method that can process a segmented raster input or a standard image. It is less susceptible to noise, correlated bands, and an unbalanced number or size of training sites within each class. This is a classification method that is widely used among researchers.|
+
+-down-
+
+## 3.2 Deep Learning (DL)
+
+> A subfield of machine learning that structures algorithms in layers to create an “artificial neural network” that can learn and make intelligent decisions on its own. 
+
+- A purpose to use ML is to create a classified image
+- Classified images from satellite/drone/airborn dataset will be used to extract change detection information.
+
+-down-
+
+A deep learning model is designed to **continually analyze data** with a logical structure similar to how a human would draw conclusions. To complete this analysis, deep learning applications use a layered structure of algorithms called an **artificial neural network**. The design of an artificial neural network is inspired by the biological network of neurons in the human brain, leading to a learning system that’s far more capable than that of standard machine learning models.
+
+-down-
+
+![](./imgs/dl_workflow.png)
+
+-down-
+
+## 3.3 Change Detection
+
+### Possible tools to classified image for _`Change Detection`_
+- `Detect Change Using Deep Learning` - using two inputs from different timeframe
+- `Analyze Change Using CCDC` - multidimensional dataset will be created from classified data... \[2006, 2009, 2014, 2018\] and analyze changes based onf classified image
+- `Compute Change Raster` - pixel differences 
+- `Analyze Changes Using LandTrendr` - Using multidimensional dataset to detect changes
+- `Detect Change Using Change Analysis Raster` - This tool uses a change analysis raster generated from the `Analyze Changes Using CCDC` tool or the `Analyze Changes Using LandTrendr` tool to generate a raster containing point of change information.
+
+-next-
+
+# 4.0 Demo, results, and discussions.
+
+-down-
+
+Demonstration and results in ArcgisPro
+- Data preparation
+- Training image dataset using semantic feature detection model
+    - Currently we are testing UNET with ResNET back-bone
+- Run tested image based on model
+
+-down-
+
+## Discussion
+- We are going to apply data augmentation for the dataset in next step of this POC.
+- We require new AOI to test and to make sure our model performs precisely and accurately on different datasets.
+- Request a new AOI if available.
+
