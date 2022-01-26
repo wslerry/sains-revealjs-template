@@ -9,9 +9,9 @@
 		<link rel="stylesheet" href="../dist/theme/{{page.theme}}.css" id="theme">
 
         <link rel="stylesheet" href="../plugin/highlight/{{page.highlight}}.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/fontawesome.min.css">
+        <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/fontawesome.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/solid.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/brands.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/brands.min.css"> -->
 
 	</head>
 
@@ -29,7 +29,11 @@
                             <p class="rightside">{{page.description}}</p>
                             <br>
                             <hr>
+                            {% if page.date%}
+                            <p class="rightside" id="date">{{page.date}}</p>
+                            {% else %}
                             <p class="rightside" id="date"></p>
+                            {% endif %}
                         </div>
                     </div>
                 </section>
